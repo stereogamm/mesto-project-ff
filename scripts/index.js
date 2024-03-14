@@ -29,9 +29,7 @@ function createCards(card, deleteCard) {
     placesList.append(cardElement); 
 }
 
-for (let i = 0; i < initialCards.length ; i++) {
-    createCards(initialCards[i], deleteCard);
-}
-
-
+initialCards.forEach(function (card) {
+    createCards(card, deleteCard);
+});
 
