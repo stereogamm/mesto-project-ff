@@ -1,7 +1,7 @@
 import './pages/index.css';
 import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js'
-import {openPopupWindow, closePopupWindow} from './scripts/modal.js'
+import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js'
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -41,7 +41,7 @@ initialCards.forEach(function (card) {
 //Открытие модального окна редактирования профиля 
 editProfileButton.addEventListener('click', () => {
     openPopupWindow(editProfilePopup);
-    setPopupData();
+    setEditProfilePopupData();
 });
 
 //открытие модального окна для добавления новой карточки
@@ -72,42 +72,28 @@ popupImageCloseButton.addEventListener('click', function(){
     closePopupWindow(cardImagePopup)
 });
 
-//закрытие попапа при клике на оверлэй
-newCardPopup.addEventListener('click', function(evt){
-    if(evt.target === newCardPopup) {
-        closePopupWindow(newCardPopup)
-    }
-}); 
-
-editProfilePopup.addEventListener('click', function(evt){
-    if(evt.target === editProfilePopup) {
-        closePopupWindow(editProfilePopup)
-    }
-}); 
-
-cardImagePopup.addEventListener('click', function(evt){
-    if(evt.target === cardImagePopup) {
-        closePopupWindow(cardImagePopup)
-    }
-}); 
-  
+//Обработчики события закрытия модальных окон при клике на оверлэй
+newCardPopup.addEventListener('click', closePopupWithOverlayClick); 
+editProfilePopup.addEventListener('click', closePopupWithOverlayClick); 
+cardImagePopup.addEventListener('click', closePopupWithOverlayClick);
+        
 //Заполнение полей формы именем/работой значениями со страницы
 const profileTitle = content.querySelector('.profile__title').textContent;
 const profileInfo = content.querySelector('.profile__description').textContent;
-function setPopupData() { 
+function setEditProfilePopupData() { 
     editPopupFieldName.value = profileTitle;
     editPopupFieldJob.value = profileInfo;
 };
 
 //Изменение страницы через попап 
-function handleFormSubmit(evt) {
+function EditProfileData(evt) {
     evt.preventDefault();
     content.querySelector('.profile__title').textContent = editPopupFieldName.value;
     content.querySelector('.profile__description').textContent = editPopupFieldJob.value;
     closePopupWindow(editProfilePopup);
 };
 
-editProfileForm.addEventListener('submit', handleFormSubmit);
+editProfileForm.addEventListener('submit', EditProfileData);
 
 //Добавление данных новой карточки 
 function createNewCard(evt) {
@@ -115,8 +101,7 @@ function createNewCard(evt) {
     const cardName = createNewCardFormFieldName.value;
     const cardLink = createNewCardFormFieldLink.value;
     const newOdject = {name: cardName, link: cardLink};
-    initialCards.unshift(newOdject);
-    addNewCard(createCard(initialCards[0], deleteCard, toActivateLike, openPreviewImage));
+    addNewCard(createCard(newOdject, deleteCard, toActivateLike, openPreviewImage));
     createNewCardForm.reset();
     closePopupWindow(newCardPopup);
 };

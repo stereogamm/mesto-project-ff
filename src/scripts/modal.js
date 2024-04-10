@@ -13,8 +13,16 @@ export function closePopupWindow(element){
 
 //Функция закрытия модального окна нажатием на Esc 
 export function closePopupWithEscButton(evt) {
-    if (evt.key === 'Escape' || evt.keyCode === 27) {
+    if (evt.key === 'Escape') {
         closePopupWindow(document.querySelector('.popup_is-opened'));
+    }
+  }
+
+  //Функция закрытия модального окна при клике на оверлэй
+
+  export function closePopupWithOverlayClick(evt) {
+    if(evt.target === evt.currentTarget) {
+        closePopupWindow(evt.currentTarget)
     }
   }
 
