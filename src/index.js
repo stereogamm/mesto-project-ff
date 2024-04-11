@@ -86,14 +86,14 @@ function setEditProfilePopupData() {
 };
 
 //Изменение страницы через попап 
-function EditProfileData(evt) {
+function editProfileData(evt) {
     evt.preventDefault();
     content.querySelector('.profile__title').textContent = editPopupFieldName.value;
     content.querySelector('.profile__description').textContent = editPopupFieldJob.value;
     closePopupWindow(editProfilePopup);
 };
 
-editProfileForm.addEventListener('submit', EditProfileData);
+editProfileForm.addEventListener('submit', editProfileData);
 
 //Добавление данных новой карточки 
 function createNewCard(evt) {
