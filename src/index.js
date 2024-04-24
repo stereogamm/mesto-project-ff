@@ -2,7 +2,7 @@ import './pages/index.css';
 import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
-import {showInputError, hideInputError, isValid, enableValidation, setEventListeners} from './scripts/validation.js';
+import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -33,6 +33,7 @@ const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 //Плавное открытие и закрытие попапов
 const allModalWindows = document.querySelectorAll('.popup');
 
+enableValidation(validationConfig);
 
 //Вывести все карточки на страницу
 initialCards.forEach(function (card) {
@@ -41,12 +42,14 @@ initialCards.forEach(function (card) {
 
 //Открытие модального окна редактирования профиля 
 editProfileButton.addEventListener('click', () => {
+    clearValidation(editProfilePopup, validationConfig);
     openPopupWindow(editProfilePopup);
     setEditProfilePopupData();
 });
 
 //открытие модального окна для добавления новой карточки
 addNewCardButton.addEventListener('click', function(){
+    clearValidation(newCardPopup, validationConfig);
     openPopupWindow(newCardPopup);
 });
 
@@ -66,6 +69,7 @@ popupEditProfileCloseButton.addEventListener('click', function(){
 });
 
 popupNewCardCloseButton.addEventListener('click', function(){
+    createNewCardForm.reset();
     closePopupWindow(newCardPopup)
 });
 
@@ -121,4 +125,4 @@ allModalWindows.forEach(function(currentModal) {
 
 
 
-
+  

@@ -1,27 +1,25 @@
-const editProfileForm = document.forms['edit-profile'];
-const editPopupFieldName = editProfileForm.elements['name'];
-const editPopupFieldJob = editProfileForm.elements['description']; 
-// const validationConfig = {
-//     formSelector: '.popup__form',
-//     inputSelector: '.popup__input',
-//     submitButtonSelector: '.popup__button',
-//     inactiveButtonClass: 'popup__button_disabled',
-//     inputErrorClass: 'popup__input_type_error',
-//     errorClass: 'popup__error_visible'
-// };
+
+export const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+};
   
 //показывает ошибку валидации
 function showError(formElement, inputElement, errorMessage) {
     const err = formElement.querySelector(`.${inputElement.id}-err`);
-    inputElement.classList.add('popup__input_type_error');
-    err.classList.add('popup__error_visible');
+    inputElement.classList.add(validationConfig.inputErrorClass);
+    err.classList.add(validationConfig.errorClass);
     err.textContent = errorMessage;
 };
 //скрывает ошибку валидации
 function hideError(formElement, inputElement) {
     const err = formElement.querySelector(`.${inputElement.id}-err`);
-    inputElement.classList.remove('popup__input_type_error');
-    err.classList.remove('popup__error_visible');
+    inputElement.classList.remove(validationConfig.inputErrorClass);
+    err.classList.remove(validationConfig.errorClass);
     err.textContent = '';
 };
 //правила показа сообщений об ошибке
@@ -47,18 +45,16 @@ function hasInvalidInput(inputList) {
 function toggleButtonState(inputList, buttonElement) {
     if (hasInvalidInput(inputList)) {
             buttonElement.disabled = true;
-            buttonElement.classList.add('popup__button_disabled');
-            buttonElement.classList.add('popup__button-inactive');
+            buttonElement.classList.add(validationConfig.inactiveButtonClass);
     } else {
         buttonElement.disabled = false;
-        buttonElement.classList.remove('popup__button_disabled');
-        buttonElement.classList.remove('popup__button-inactive');
+        buttonElement.classList.remove(validationConfig.inactiveButtonClass);
     }
 };
-//ивентлисенер при вводе в воле
+//ивентлисенер при каждом вводе в воле
 function setEventListeners(formElement) {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__button');
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
 
     toggleButtonState(inputList, buttonElement);
 
@@ -71,18 +67,27 @@ function setEventListeners(formElement) {
     });
 };
 
-setEventListeners(editProfileForm);
+//очищение текста ошибок (вызовы в index.js)
+export function clearValidation(formElement, validationConfig) {
+    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
 
-//очищение текста ошибок (нужны вызовы в index.js)
-function clearValidation(formElement) {
-    const buttonElement = formElement.querySelector('.popup__button');
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-
-    inputList.forEach((input) => {
+    inputList.forEach((inputElement) => {
         hideError(formElement, inputElement)
     });
     toggleButtonState(inputList, buttonElement);
 }
 
+//функция для включения валидации во всех формах
+export function enableValidation(validationConfig) {
+    
+        const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
+        formList.forEach((formElement) => {
+          formElement.addEventListener('submit', function (evt) {
+            evt.preventDefault();
+        });
+        setEventListeners(formElement);
+        });
+      }
 
-
+         
