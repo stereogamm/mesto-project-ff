@@ -1,7 +1,8 @@
 import './pages/index.css';
 import {initialCards} from './scripts/cards.js';
-import {createCard, deleteCard, toActivateLike} from './scripts/card.js'
-import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js'
+import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
+import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
+import {showInputError, hideInputError, isValid, enableValidation, setEventListeners} from './scripts/validation.js';
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -21,7 +22,7 @@ const popupImage = page.querySelector('.popup__image');
 const popupNewCardCloseButton = page.querySelector('.popup_type_new-card .popup__close');
 const popupEditProfileCloseButton = page.querySelector('.popup_type_edit .popup__close');
 const popupImageCloseButton = page.querySelector('.popup_type_image .popup__close');
-//Заполнение полей формы именем/призванием значениями со страницы
+//Заполнение полей формы именем/занятием значениями со страницы
 const editProfileForm = document.forms['edit-profile'];
 const editPopupFieldName = editProfileForm.elements['name'];
 const editPopupFieldJob = editProfileForm.elements['description'];
@@ -117,4 +118,7 @@ function addNewCard(newCard) {
 allModalWindows.forEach(function(currentModal) {
     currentModal.classList.toggle('popup_is-animated');
 });
+
+
+
 
