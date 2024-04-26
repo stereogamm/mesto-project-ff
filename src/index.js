@@ -3,6 +3,7 @@ import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
+import {config, userInfo} from './scripts/api.js';
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -33,7 +34,7 @@ const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 //Плавное открытие и закрытие попапов
 const allModalWindows = document.querySelectorAll('.popup');
 
-enableValidation(validationConfig);
+enableValidation(validationConfig);            
 
 //Вывести все карточки на страницу
 initialCards.forEach(function (card) {
@@ -83,8 +84,21 @@ editProfilePopup.addEventListener('click', closePopupWithOverlayClick);
 cardImagePopup.addEventListener('click', closePopupWithOverlayClick);
         
 //Заполнение полей формы именем/работой значениями со страницы
-const profileTitle = content.querySelector('.profile__title').textContent;
-const profileInfo = content.querySelector('.profile__description').textContent;
+const profileTitle = content.querySelector('.profile__title');
+const profileInfo = content.querySelector('.profile__description');
+const profileImage = content.querySelector('.profile__image');
+
+
+//Загрузка данных для информации в профиле 
+userInfo()
+.then((data) => {
+    const userId = data._id; //user id
+    profileTitle.textContent = data.name; //отрисовываем имя
+    profileInfo.textContent = data.about; //отрисовываем подзаголовок
+    profileImage.style = `background-image: url('${data.avatar}')`; //отрисовываем аватар
+})
+
+
 function setEditProfilePopupData() { 
     editPopupFieldName.value = profileTitle;
     editPopupFieldJob.value = profileInfo;
