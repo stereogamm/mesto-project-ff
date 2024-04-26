@@ -19,7 +19,7 @@ export const config = {
     console.log(error);
   }
 
-//запрос на получение информации для профиля
+//запрос на получение данных пользователя
 export const userInfo = () => {
  return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
@@ -28,9 +28,17 @@ export const userInfo = () => {
     .catch(errorResponseHandler)
 }
    
-//
-        
- 
+//запрос на получение карточек с сервера
+export const requestCardsArray = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+}
+
+//  //запрос на редактирование профиля
+//  const updateUserInfo = (userData) => 
     
  
 

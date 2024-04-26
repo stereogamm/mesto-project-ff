@@ -3,7 +3,10 @@ import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
-import {config, userInfo} from './scripts/api.js';
+import {config, userInfo, requestCardsArray} from './scripts/api.js';
+
+//TO DO 
+//УДАЛИТЬ ПЕРЕД ДЕПЛОЕМ МЕТОД ПОЛУЧЕНИЯ КАРТОЧЕК И ФАЙЛ С МАССИВОМ!!!
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -35,11 +38,6 @@ const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 const allModalWindows = document.querySelectorAll('.popup');
 
 enableValidation(validationConfig);            
-
-//Вывести все карточки на страницу
-initialCards.forEach(function (card) {
-    placesList.append(createCard(card, deleteCard, toActivateLike, openPreviewImage));
-});
 
 //Открытие модального окна редактирования профиля 
 editProfileButton.addEventListener('click', () => {
@@ -89,15 +87,23 @@ const profileInfo = content.querySelector('.profile__description');
 const profileImage = content.querySelector('.profile__image');
 
 
-//Загрузка данных для информации в профиле 
-userInfo()
+//Асинхронный общий промис для запроса данных о пользователе и карточек, так как в отрисовке карточек нам нужен userId из первого запроса
+Promise.all([userInfo(),requestCardsArray()])
 .then((data) => {
-    const userId = data._id; //user id
-    profileTitle.textContent = data.name; //отрисовываем имя
-    profileInfo.textContent = data.about; //отрисовываем подзаголовок
-    profileImage.style = `background-image: url('${data.avatar}')`; //отрисовываем аватар
+    const userData = data[0]; // данные о пользователе из промиса userInfo()
+    const cardsData = data[1]; //массив карточек из промиса requestCardsArray()
+    //далее работаем с этими переменными в текущем и следующем промисе
+    const userId = userData._id; //user id
+    profileTitle.textContent = userData.name; //отрисовываем имя
+    profileInfo.textContent = userData.about; //отрисовываем подзаголовок
+    profileImage.style = `background-image: url('${userData.avatar}')`; //отрисовываем аватар
+    return cardsData ;
 })
-
+.then((cardsData) => { //работа с данными для отрисовки карточек
+    cardsData.forEach(function(card) {
+        placesList.append(createCard(card, deleteCard, toActivateLike, openPreviewImage));
+    });
+})
 
 function setEditProfilePopupData() { 
     editPopupFieldName.value = profileTitle;
