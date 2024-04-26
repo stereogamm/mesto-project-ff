@@ -37,8 +37,19 @@ export const requestCardsArray = () => {
   .catch(errorResponseHandler)
 }
 
-//  //запрос на редактирование профиля
-//  const updateUserInfo = (userData) => 
+ //запрос на редактирование профиля
+ export const updateUserInfo = (name, about) => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      name: name,
+      about: about
+    })
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+ }
     
  
 

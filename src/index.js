@@ -3,7 +3,7 @@ import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
-import {config, userInfo, requestCardsArray} from './scripts/api.js';
+import {config, userInfo, requestCardsArray, updateUserInfo} from './scripts/api.js';
 
 //TO DO 
 //УДАЛИТЬ ПЕРЕД ДЕПЛОЕМ МЕТОД ПОЛУЧЕНИЯ КАРТОЧЕК И ФАЙЛ С МАССИВОМ!!!
@@ -81,11 +81,6 @@ newCardPopup.addEventListener('click', closePopupWithOverlayClick);
 editProfilePopup.addEventListener('click', closePopupWithOverlayClick); 
 cardImagePopup.addEventListener('click', closePopupWithOverlayClick);
         
-//Заполнение полей формы именем/работой значениями со страницы
-const profileTitle = content.querySelector('.profile__title');
-const profileInfo = content.querySelector('.profile__description');
-const profileImage = content.querySelector('.profile__image');
-
 
 //Асинхронный общий промис для запроса данных о пользователе и карточек, так как в отрисовке карточек нам нужен userId из первого запроса
 Promise.all([userInfo(),requestCardsArray()])
@@ -105,17 +100,25 @@ Promise.all([userInfo(),requestCardsArray()])
     });
 })
 
+//Заполнение полей формы именем/описанием значениями со страницы
+const profileTitle = content.querySelector('.profile__title');
+const profileInfo = content.querySelector('.profile__description');
+const profileImage = content.querySelector('.profile__image');
+
 function setEditProfilePopupData() { 
-    editPopupFieldName.value = profileTitle;
-    editPopupFieldJob.value = profileInfo;
+    editPopupFieldName.value = profileTitle.textContent;
+    editPopupFieldJob.value = profileInfo.textContent;;
 };
 
-//Изменение страницы через попап 
+//Изменение профиля через попап + вызов промиса 
 function editProfileData(evt) {
     evt.preventDefault();
     content.querySelector('.profile__title').textContent = editPopupFieldName.value;
     content.querySelector('.profile__description').textContent = editPopupFieldJob.value;
     closePopupWindow(editProfilePopup);
+    let name = editPopupFieldName.value;
+    let about = editPopupFieldJob.value
+    updateUserInfo(name, about);
 };
 
 editProfileForm.addEventListener('submit', editProfileData);
