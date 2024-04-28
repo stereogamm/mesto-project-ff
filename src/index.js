@@ -3,7 +3,7 @@ import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
-import {config, userInfo, requestCardsArray, updateUserInfo} from './scripts/api.js';
+import {config, userInfo, requestCardsArray, updateUserInfo, addedNewCard} from './scripts/api.js';
 
 //TO DO 
 //УДАЛИТЬ ПЕРЕД ДЕПЛОЕМ МЕТОД ПОЛУЧЕНИЯ КАРТОЧЕК И ФАЙЛ С МАССИВОМ!!!
@@ -132,6 +132,7 @@ function createNewCard(evt) {
     addNewCard(createCard(newOdject, deleteCard, toActivateLike, openPreviewImage));
     createNewCardForm.reset();
     closePopupWindow(newCardPopup);
+    addedNewCard(cardName, cardLink)
 };
 
 createNewCardForm.addEventListener('submit', createNewCard);

@@ -51,5 +51,18 @@ export const requestCardsArray = () => {
   .catch(errorResponseHandler)
  }
     
+ //Добавление новой карточки
+ export const addedNewCard = (cardName, cardLink) => {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: 'POST',
+    headers: config.headers,
+    body: JSON.stringify({
+      name: cardName,
+      link: cardLink
+    })
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+ }
  
 
