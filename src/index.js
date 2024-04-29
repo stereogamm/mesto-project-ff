@@ -37,6 +37,7 @@ const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 //Плавное открытие и закрытие попапов
 const allModalWindows = document.querySelectorAll('.popup');
 
+
 enableValidation(validationConfig);            
 
 //Открытие модального окна редактирования профиля 
@@ -80,7 +81,8 @@ popupImageCloseButton.addEventListener('click', function(){
 newCardPopup.addEventListener('click', closePopupWithOverlayClick); 
 editProfilePopup.addEventListener('click', closePopupWithOverlayClick); 
 cardImagePopup.addEventListener('click', closePopupWithOverlayClick);
-        
+
+
 
 //Асинхронный общий промис для запроса данных о пользователе и карточек, так как в отрисовке карточек нам нужен userId из первого запроса
 Promise.all([userInfo(),requestCardsArray()])
@@ -88,15 +90,18 @@ Promise.all([userInfo(),requestCardsArray()])
     const userData = data[0]; // данные о пользователе из промиса userInfo()
     const cardsData = data[1]; //массив карточек из промиса requestCardsArray()
     //далее работаем с этими переменными в текущем и следующем промисе
-    const userId = userData._id; //user id
+    const userId = userData._id;
+    
     profileTitle.textContent = userData.name; //отрисовываем имя
     profileInfo.textContent = userData.about; //отрисовываем подзаголовок
     profileImage.style = `background-image: url('${userData.avatar}')`; //отрисовываем аватар
-    return cardsData ;
-})
-.then((cardsData) => { //работа с данными для отрисовки карточек
+
+    return ([cardsData, userId]);
+    
+}) 
+.then(([cardsData, userId]) => { //работа с данными для отрисовки карточек
     cardsData.forEach(function(card) {
-        placesList.append(createCard(card, deleteCard, toActivateLike, openPreviewImage));
+        placesList.append(createCard(card, deleteCard, toActivateLike, openPreviewImage, userId));
     });
 })
 
@@ -128,7 +133,7 @@ function createNewCard(evt) {
     evt.preventDefault();
     const cardName = createNewCardFormFieldName.value;
     const cardLink = createNewCardFormFieldLink.value;
-    const newOdject = {name: cardName, link: cardLink};
+    const newOdject = {name: cardName, link: cardLink, likes:[], owner: {}};
     addNewCard(createCard(newOdject, deleteCard, toActivateLike, openPreviewImage));
     createNewCardForm.reset();
     closePopupWindow(newCardPopup);

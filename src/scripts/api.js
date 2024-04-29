@@ -65,4 +65,12 @@ export const requestCardsArray = () => {
   .catch(errorResponseHandler)
  }
  
-
+//Удаление карточки
+export const cardWillBeDeleted = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+}
