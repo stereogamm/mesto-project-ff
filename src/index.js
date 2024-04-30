@@ -92,6 +92,7 @@ Promise.all([userInfo(),requestCardsArray()])
     //далее работаем с этими переменными в текущем и следующем промисе
     const userId = userData._id;
     
+
     profileTitle.textContent = userData.name; //отрисовываем имя
     profileInfo.textContent = userData.about; //отрисовываем подзаголовок
     profileImage.style = `background-image: url('${userData.avatar}')`; //отрисовываем аватар

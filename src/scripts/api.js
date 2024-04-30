@@ -74,3 +74,24 @@ export const cardWillBeDeleted = (cardId) => {
   .then(serverResponseHandler) 
   .catch(errorResponseHandler)
 }
+
+//Постановка лайка
+
+export const cardWillBeLiked = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+}
+
+//Cнятие лайка
+export const likeWillbeDeleted = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+}
