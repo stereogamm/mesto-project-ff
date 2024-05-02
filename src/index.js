@@ -1,12 +1,8 @@
 import './pages/index.css';
-import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
 import {config, userInfo, requestCardsArray, updateUserInfo, addedNewCard, updateAvatarImage} from './scripts/api.js';
-
-//TO DO 
-//УДАЛИТЬ ПЕРЕД ДЕПЛОЕМ МЕТОД ПОЛУЧЕНИЯ КАРТОЧЕК И ФАЙЛ С МАССИВОМ!!!
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -64,8 +60,6 @@ userAvatar.addEventListener('click', function() {
     clearValidation(newAvatarPopup, validationConfig);
     openPopupWindow(newAvatarPopup);
 })
-
-
 
 //открытие фото при клике на карточку 
 function openPreviewImage (evt) {

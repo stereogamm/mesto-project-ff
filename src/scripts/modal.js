@@ -19,7 +19,6 @@ export function closePopupWithEscButton(evt) {
   }
 
   //Функция закрытия модального окна при клике на оверлэй
-
   export function closePopupWithOverlayClick(evt) {
     if(evt.target === evt.currentTarget) {
         closePopupWindow(evt.currentTarget)
