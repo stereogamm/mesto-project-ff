@@ -76,7 +76,6 @@ export const cardWillBeDeleted = (cardId) => {
 }
 
 //Постановка лайка
-
 export const cardWillBeLiked = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
@@ -91,6 +90,19 @@ export const likeWillbeDeleted = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
+  })
+  .then(serverResponseHandler) 
+  .catch(errorResponseHandler)
+}
+
+//Обновление аватара пользователя
+export const updateAvatarImage = (avatarLink) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: avatarLink
+    })
   })
   .then(serverResponseHandler) 
   .catch(errorResponseHandler)

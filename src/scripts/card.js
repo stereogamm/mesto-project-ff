@@ -13,6 +13,11 @@ export function createCard(card, deleteCard, toActivateLike, openPreviewImage, u
     const ownerId = card.owner._id;
     const cardId = card._id;
     
+    card.likes.forEach((likes) => {
+        if(!(card.likes._id == card.owner._id)) {
+            likeCardButton.classList.add('card__like-button_is-active')
+        }
+    })
 
     cardElement.querySelector('.card__image').src = card.link;
     cardElement.querySelector('.card__image').alt = card.name;
@@ -40,16 +45,15 @@ export function deleteCard(cardId, cardElement) {
     cardElement.remove();
 }
 
-//Функция лайка карточки
+//Функция лайка карточки 
 export function toActivateLike(evt, cardId, likeCount) {
-    if(evt.target.classList.contains('card__like-button') && !evt.target.classList.contains('card__like-button_is-active')){
+    if(evt.target.classList.contains('card__like-button') && !(evt.target.classList.contains('card__like-button_is-active'))){
         evt.target.classList.toggle('card__like-button_is-active');
         cardWillBeLiked(cardId)
             .then ((data) => {
             likeCount.textContent = data.likes.length;
-     }
-     )
-    } else if(evt.target.classList.contains('card__like-button_is-active')) {
+     })
+    } else if(evt.target.classList.contains('card__like-button') && (evt.target.classList.contains('card__like-button_is-active'))) {
         evt.target.classList.remove('card__like-button_is-active');
         likeWillbeDeleted(cardId) 
             .then ((data) => {
