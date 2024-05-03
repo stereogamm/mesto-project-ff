@@ -2,7 +2,7 @@ import './pages/index.css';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
-import {config, userInfo, requestCardsArray, updateUserInfo, addedNewCard, updateAvatarImage} from './scripts/api.js';
+import {userInfo, requestCardsArray, updateUserInfo, addedNewCard, updateAvatarImage} from './scripts/api.js';
 
 //DOM nodes
 const page = document.querySelector('.page');
@@ -117,6 +117,10 @@ Promise.all([userInfo(),requestCardsArray()])
         placesList.append(createCard(card, deleteCard, toActivateLike, openPreviewImage, userId));
     }); 
 })
+    .catch((err) => {
+        console.log(err);
+})
+
 
 //Заполнение полей формы именем/описанием значениями со страницы
 const profileTitle = content.querySelector('.profile__title');

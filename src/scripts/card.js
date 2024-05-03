@@ -13,18 +13,24 @@ export function createCard(card, deleteCard, toActivateLike, openPreviewImage, u
     const ownerId = card.owner._id;
     const cardId = card._id;
     
-    card.likes.forEach((likes) => {
-        if(!(card.likes._id == card.owner._id)) {
-            likeCardButton.classList.add('card__like-button_is-active')
-        }
-    })
+  
+    //ищем элемент в массиве лайков для которого истинно условие (id пользователя есть среди массива лайкнувших карточку). Возвращаем true  в переменной.
+    const likeOwner = card.likes.some(function(likes) { 
+        return likes._id === userId;
+}); 
+
+    if (likeOwner) {
+        likeCardButton.classList.add('card__like-button_is-active');
+    } else {
+        likeCardButton.classList.remove('card__like-button_is-active');
+    }
 
     cardElement.querySelector('.card__image').src = card.link;
     cardElement.querySelector('.card__image').alt = card.name;
     cardElement.querySelector('.card__title').textContent = card.name;
     cardElement.querySelector('.like_count').textContent = card.likes.length;
 
-    renderDeleteCardButton(userId, ownerId, deleteCardButton);
+    // renderDeleteCardButton(userId, ownerId, deleteCardButton); Раскомментировать перед деплоем!!!!!!!!!!!!!!!!!!!!!
    
     deleteCardButton.addEventListener('click', () => {
         deleteCard(cardId, cardElement);
@@ -53,12 +59,18 @@ export function toActivateLike(evt, cardId, likeCount) {
             .then ((data) => {
             likeCount.textContent = data.likes.length;
      })
+            .catch((err) => {
+            console.log(err);
+})
     } else if(evt.target.classList.contains('card__like-button') && (evt.target.classList.contains('card__like-button_is-active'))) {
         evt.target.classList.remove('card__like-button_is-active');
         likeWillbeDeleted(cardId) 
             .then ((data) => {
             likeCount.textContent = data.likes.length;
      })
+            .catch((err) => {
+            console.log(err);
+})
     }
 }
 

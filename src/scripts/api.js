@@ -1,4 +1,4 @@
-export const config = {
+const config = {
     baseUrl: 'https://mesto.nomoreparties.co./v1/wff-cohort-12',
     headers: {
       authorization: '40763991-4d89-4574-a25e-bed5b549aaca',
@@ -14,18 +14,13 @@ export const config = {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  //общая функция-обработчик ошибки сервера
-  const errorResponseHandler = (error) => {
-    console.log(error);
-  }
-
+  
 //запрос на получение данных пользователя
 export const userInfo = () => {
  return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
     .then(serverResponseHandler) 
-    .catch(errorResponseHandler)
 }
    
 //запрос на получение карточек с сервера
@@ -34,7 +29,6 @@ export const requestCardsArray = () => {
     headers: config.headers
   })
   .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
 }
 
  //запрос на редактирование профиля
@@ -48,7 +42,6 @@ export const requestCardsArray = () => {
     })
   })
   .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
  }
     
  //Добавление новой карточки
@@ -62,7 +55,6 @@ export const requestCardsArray = () => {
     })
   })
   .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
  }
  
 //Удаление карточки
@@ -72,7 +64,6 @@ export const cardWillBeDeleted = (cardId) => {
     headers: config.headers
   })
   .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
 }
 
 //Постановка лайка
@@ -82,7 +73,6 @@ export const cardWillBeLiked = (cardId) => {
     headers: config.headers
   })
   .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
 }
 
 //Cнятие лайка
@@ -92,7 +82,6 @@ export const likeWillbeDeleted = (cardId) => {
     headers: config.headers
   })
   .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
 }
 
 //Обновление аватара пользователя
@@ -104,6 +93,5 @@ export const updateAvatarImage = (avatarLink) => {
       avatar: avatarLink
     })
   })
-  .then(serverResponseHandler) 
-  .catch(errorResponseHandler)
+  .then(serverResponseHandler)
 }
