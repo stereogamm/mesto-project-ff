@@ -63,7 +63,7 @@ function setEventListeners(formElement) {
 
     toggleButtonState(inputList, buttonElement);
 
-    inputList.forEach((inputElement) => { // Назначаем обработчик события input для каждого поля ввода
+    inputList.forEach((inputElement) => { 
         inputElement.addEventListener('input', () => {
             checkInputValidity(formElement, inputElement);
 

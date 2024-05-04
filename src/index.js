@@ -4,6 +4,7 @@ import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './s
 import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
 import {userInfo, requestCardsArray, updateUserInfo, addedNewCard, updateAvatarImage} from './scripts/api.js';
 
+
 //DOM nodes
 const page = document.querySelector('.page');
 const content = page.querySelector('.content');
@@ -38,6 +39,7 @@ const createNewCardFormFieldName = createNewCardForm.elements['place-name'];
 const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 //Селектор всех модальных окон
 const allModalWindows = document.querySelectorAll('.popup');
+
 
 
 enableValidation(validationConfig);            
@@ -96,6 +98,7 @@ editProfilePopup.addEventListener('click', closePopupWithOverlayClick);
 cardImagePopup.addEventListener('click', closePopupWithOverlayClick);
 newAvatarPopup.addEventListener('click', closePopupWithOverlayClick);
 
+let userId;
 
 //Асинхронный общий промис для запроса данных о пользователе и карточек, так как в отрисовке карточек нам нужен userId из первого запроса
 Promise.all([userInfo(),requestCardsArray()])
@@ -103,7 +106,8 @@ Promise.all([userInfo(),requestCardsArray()])
     const userData = data[0]; // данные о пользователе из промиса userInfo()
     const cardsData = data[1]; //массив карточек из промиса requestCardsArray()
     //далее работаем с этими переменными в текущем и следующем промисе
-    const userId = userData._id;
+    userId = userData._id;
+    console.log(userId);
     
 
     profileTitle.textContent = userData.name; //отрисовываем имя
@@ -121,7 +125,6 @@ Promise.all([userInfo(),requestCardsArray()])
         console.log(err);
 })
 
-
 //Заполнение полей формы именем/описанием значениями со страницы
 const profileTitle = content.querySelector('.profile__title');
 const profileInfo = content.querySelector('.profile__description');
@@ -136,17 +139,21 @@ function setEditProfilePopupData() {
 function editProfileData(evt) {
     evt.preventDefault();
 
-    content.querySelector('.profile__title').textContent = editPopupFieldName.value;
-    content.querySelector('.profile__description').textContent = editPopupFieldJob.value;
-    renderLoading(true, editProfileForm.querySelector('.popup__button'));
-    closePopupWindow(editProfilePopup);
     let name = editPopupFieldName.value;
-    let about = editPopupFieldJob.value
+    let about = editPopupFieldJob.value;
+
+    renderLoading(true, editProfileForm.querySelector('.popup__button'));
     updateUserInfo(name, about)
+        .then((data) => {
+            profileTitle.textContent = data.name;
+            profileInfo.textContent = data.about;
+            closePopupWindow(editProfilePopup);
+            editProfileForm.reset();
+        })
         .catch((err) => {
             console.log(err);
         })
-        .finally(() => renderLoading(true, editProfileForm.querySelector('.popup__button')))
+        .finally(() => renderLoading(false, editProfileForm.querySelector('.popup__button')))
 };
 
 editProfileForm.addEventListener('submit', editProfileData);
@@ -160,8 +167,10 @@ function editAvatarImage(evt) {
     renderLoading(true, newAvatarForm.querySelector('.popup__button'));
     updateAvatarImage(avatarLink)
         .then((data) => {
-           let avatarImage = data.avatar;
-           userAvatar.style = `background-image: url(${avatarImage})`
+            let avatarImage = data.avatar;
+            userAvatar.style = `background-image: url(${avatarImage})`;
+            closePopupWindow(newAvatarPopup);
+            newAvatarForm.reset();
         })
         .catch((err) => {
             console.log(err);
@@ -170,8 +179,6 @@ function editAvatarImage(evt) {
             renderLoading(false, newAvatarForm.querySelector('.popup__button'))
         }
     )
-    closePopupWindow(newAvatarPopup);
-    newAvatarForm.reset();
 }
 
 newAvatarForm.addEventListener('submit', editAvatarImage);
@@ -181,16 +188,20 @@ function createNewCard(evt) {
     evt.preventDefault();
     const cardName = createNewCardFormFieldName.value;
     const cardLink = createNewCardFormFieldLink.value;
-    const newOdject = {name: cardName, link: cardLink, likes:[], owner: {}};
-    addNewCard(createCard(newOdject, deleteCard, toActivateLike, openPreviewImage));
-    createNewCardForm.reset();
-    closePopupWindow(newCardPopup);
-    renderLoading(true, createNewCardForm.querySelector('.popup__button'))
+    // const newOdject = {name: cardName, link: cardLink, likes:[], owner: {}};
+    
+    renderLoading(true, createNewCardForm.querySelector('.popup__button'));
     addedNewCard(cardName, cardLink)
+        .then((data) => {
+            console.log(data);
+            addNewCard(createCard(data, deleteCard, toActivateLike, openPreviewImage, userId));
+            createNewCardForm.reset();
+            closePopupWindow(newCardPopup);
+        })
         .catch((err) => {
         console.log(err);
     })
-        .finally(() => renderLoading(true, createNewCardForm.querySelector('.popup__button')))
+        .finally(() => renderLoading(false, createNewCardForm.querySelector('.popup__button')))
 };
 
 createNewCardForm.addEventListener('submit', createNewCard);

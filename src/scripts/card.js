@@ -2,6 +2,7 @@ import {config, cardWillBeDeleted, cardWillBeLiked, likeWillbeDeleted} from './a
 
 //Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content; 
+
 //Функция создания карточки
 export function createCard(card, deleteCard, toActivateLike, openPreviewImage, userId) {
     const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
@@ -13,7 +14,7 @@ export function createCard(card, deleteCard, toActivateLike, openPreviewImage, u
     const ownerId = card.owner._id;
     const cardId = card._id;
     
-  
+
     //ищем элемент в массиве лайков для которого истинно условие (id пользователя есть среди массива лайкнувших карточку). Возвращаем true  в переменной.
     const likeOwner = card.likes.some(function(likes) { 
         return likes._id === userId;
@@ -30,7 +31,7 @@ export function createCard(card, deleteCard, toActivateLike, openPreviewImage, u
     cardElement.querySelector('.card__title').textContent = card.name;
     cardElement.querySelector('.like_count').textContent = card.likes.length;
 
-    // renderDeleteCardButton(userId, ownerId, deleteCardButton); Раскомментировать перед деплоем!!!!!!!!!!!!!!!!!!!!!
+    renderDeleteCardButton(userId, ownerId, deleteCardButton);
    
     deleteCardButton.addEventListener('click', () => {
         deleteCard(cardId, cardElement);
@@ -76,6 +77,7 @@ export function toActivateLike(evt, cardId, likeCount) {
 
 //Логика отображения/скрытия иконки удаления карточки 
 function renderDeleteCardButton(userId, ownerId, button) {
+    console.log(userId, ownerId, button);
     if (!(userId == ownerId)) {
         button.hidden = true;
     }
