@@ -1,7 +1,7 @@
 import './pages/index.css';
 import {createCard, deleteCard, toActivateLike} from './scripts/card.js';
 import {openPopupWindow, closePopupWindow, closePopupWithOverlayClick} from './scripts/modal.js';
-import {clearValidation, enableValidation, validationConfig} from './scripts/validation.js';
+import {clearValidation, enableValidation} from './scripts/validation.js';
 import {userInfo, requestCardsArray, updateUserInfo, addedNewCard, updateAvatarImage} from './scripts/api.js';
 
 
@@ -40,6 +40,14 @@ const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 //Селектор всех модальных окон
 const allModalWindows = document.querySelectorAll('.popup');
 
+const validationConfig = {
+    formSelector: '.popup__form', // Селектор формы
+    inputSelector: '.popup__input', // Селекторы полей ввода
+    submitButtonSelector: '.popup__button', // Селектор кнопки отправки
+    inactiveButtonClass: 'popup__button_disabled', // Класс неактивной кнопки
+    inputErrorClass: 'popup__input_type_error', // Класс ошибки в поле ввода
+    errorClass: 'popup__error_visible' // Класс отображения ошибки
+};
 
 
 enableValidation(validationConfig);            
@@ -107,7 +115,6 @@ Promise.all([userInfo(),requestCardsArray()])
     const cardsData = data[1]; //массив карточек из промиса requestCardsArray()
     //далее работаем с этими переменными в текущем и следующем промисе
     userId = userData._id;
-    console.log(userId);
     
 
     profileTitle.textContent = userData.name; //отрисовываем имя
@@ -193,7 +200,6 @@ function createNewCard(evt) {
     renderLoading(true, createNewCardForm.querySelector('.popup__button'));
     addedNewCard(cardName, cardLink)
         .then((data) => {
-            console.log(data);
             addNewCard(createCard(data, deleteCard, toActivateLike, openPreviewImage, userId));
             createNewCardForm.reset();
             closePopupWindow(newCardPopup);

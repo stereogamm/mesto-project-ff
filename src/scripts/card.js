@@ -77,7 +77,6 @@ export function toActivateLike(evt, cardId, likeCount) {
 
 //Логика отображения/скрытия иконки удаления карточки 
 function renderDeleteCardButton(userId, ownerId, button) {
-    console.log(userId, ownerId, button);
     if (!(userId == ownerId)) {
         button.hidden = true;
     }
