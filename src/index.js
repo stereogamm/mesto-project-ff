@@ -39,6 +39,10 @@ const createNewCardFormFieldName = createNewCardForm.elements['place-name'];
 const createNewCardFormFieldLink = createNewCardForm.elements['link'];
 //Селектор всех модальных окон
 const allModalWindows = document.querySelectorAll('.popup');
+//Поля формы имени/описания значениями со страницы
+const profileTitle = content.querySelector('.profile__title');
+const profileInfo = content.querySelector('.profile__description');
+const profileImage = content.querySelector('.profile__image');
 
 const validationConfig = {
     formSelector: '.popup__form', // Селектор формы
@@ -133,10 +137,6 @@ Promise.all([userInfo(),requestCardsArray()])
 })
 
 //Заполнение полей формы именем/описанием значениями со страницы
-const profileTitle = content.querySelector('.profile__title');
-const profileInfo = content.querySelector('.profile__description');
-const profileImage = content.querySelector('.profile__image');
-
 function setEditProfilePopupData() { 
     editPopupFieldName.value = profileTitle.textContent;
     editPopupFieldJob.value = profileInfo.textContent;;
@@ -169,7 +169,7 @@ editProfileForm.addEventListener('submit', editProfileData);
 function editAvatarImage(evt) {
     evt.preventDefault();
     
-    let avatarLink = newAvatarEditField.value;
+    const avatarLink = newAvatarEditField.value;
     
     renderLoading(true, newAvatarForm.querySelector('.popup__button'));
     updateAvatarImage(avatarLink)

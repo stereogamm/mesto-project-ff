@@ -1,4 +1,4 @@
-import {config, cardWillBeDeleted, cardWillBeLiked, likeWillbeDeleted} from './api.js';
+import {cardWillBeDeleted, cardWillBeLiked, likeWillbeDeleted} from './api.js';
 
 //Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content; 
